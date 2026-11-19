@@ -35,3 +35,11 @@ goruntu/*_Ã–n*
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Yerel test/tarama çıktıları
+out/
+
+# Kişisel veri ve akademik belgeler (herkese açık depoya konmaz)
+goruntu/user2_*.png
+*.docx
+generate_tubitak_docx.py

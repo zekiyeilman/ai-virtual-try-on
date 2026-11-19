@@ -32,7 +32,7 @@ from ..paths import CALIBRATION_JSON
 class MediaPipeAdaptiveCalibrator:
     def __init__(self, memory_file=str(CALIBRATION_JSON)):
         self.mp_pose = mp.solutions.pose
-        self.pose = self.mp_pose.Pose(static_image_mode=True, model_complexity=1, enable_segmentation=True)
+        self.pose = self.mp_pose.Pose(static_image_mode=True, model_complexity=1, enable_segmentation=False)
         self.memory_file = memory_file
 
         # Biyometrik Veritabanı (Yaş ve Cinsiyet bazlı %100 Kemik Sabitleri)
