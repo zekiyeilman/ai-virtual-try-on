@@ -43,3 +43,11 @@ out/
 goruntu/user2_*.png
 *.docx
 generate_tubitak_docx.py
+
+# Claude Code: yalnız proje ayarı, kancalar ve projeye özel skill izlenir
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/vton-beden-testi/
