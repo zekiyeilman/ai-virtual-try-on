@@ -69,6 +69,24 @@ Sistem 6 ana katmandan oluşur:
 
 ---
 
+## 3c. Skill'ler ve Koruma Kancaları
+
+| Durum | Skill |
+| :--- | :--- |
+| Beden/kalıp/maske/ısı haritası kodu değişti; görsel uyum şikayeti | `vton-beden-testi` (proje skill'i, `.claude/skills/`) |
+| Hata, test kırılması, beklenmeyen görüntü | `systematic-debugging` |
+| Yeni fizik/ölçekleme kuralı | `tdd` (önce `tests/test_fit_physics.py`'ye kırmızı test) |
+| "Bitti/düzeldi" demeden, commit öncesi | `verification-before-completion` |
+| `mask_generator.py` bölme, modül arayüzü | `codebase-design` |
+| Model/lisans/makale araştırması | `research` / `anthropic-skills:deep-research` |
+| TÜBİTAK/tez `.docx` | `anthropic-skills:docx` |
+
+- **Git koruması** (`.claude/settings.json` → `.claude/hooks/block_dangerous_git.py`): force push, `reset --hard`, `clean -f`, `branch -D`, `checkout .`/`restore .`, geçmiş yeniden yazma engellenir. Normal `git push` serbest.
+- **Pre-commit** (`.githooks/pre-commit`, `git config core.hooksPath .githooks` ile etkin; yeni klonda bu komutu tekrar çalıştırın): kişisel veri (`user2_*.png`, `.docx`, `.env`) commit'ini engeller, pyflakes gerçek hatalar, hızlı pytest (~45 sn).
+- Depo **herkese açık**: kişisel fotoğraf/belge eklemeden önce kullanıcıya sorun.
+
+---
+
 ## 4. Dosya Haritası: Hangi Dosyalar Sürekli İşlenmeli, Hangilerine Bir Kez Bakmak Yeterli?
 
 > **ÖNEMLİ TOKEN KURALI**: Tüm projeyi her seferinde baştan sona okumayın. Aşağıdaki sınıflandırmaya göre yalnızca ilgili modülü okuyun.

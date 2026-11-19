@@ -1,0 +1,42 @@
+#!/bin/sh
+# VTON pre-commit kancası (kurulum: git config core.hooksPath .githooks)
+# 1) Kişisel veri / belge koruması  2) pyflakes gerçek hatalar  3) hızlı pytest
+# Acil durumda atlamak için: git commit --no-verify
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+if [ -x .venv/Scripts/python.exe ]; then PY=.venv/Scripts/python.exe
+elif [ -x .venv/bin/python ]; then PY=.venv/bin/python
+else PY=python; fi
+
+# 1) Herkese açık depoya gitmemesi gereken dosyalar (.gitignore'u `git add -f` ile aşmaya karşı)
+BLOCKED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '(^|/)user2_[^/]*\.png$|\.docx$|(^|/)generate_tubitak_docx\.py$|(^|/)\.env(\..*)?$|^\.claude/settings\.local\.json$')
+if [ -n "$BLOCKED" ]; then
+  echo "pre-commit: kişisel veri/belge commit edilemez (depo herkese açık):"
+  echo "$BLOCKED" | sed 's/^/  - /'
+  exit 1
+fi
+
+# 2) pyflakes: yalnız gerçek hatalar (tanımsız isim, sözdizimi vb.) commit'i durdurur
+PYFILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.py')
+if [ -n "$PYFILES" ]; then
+  ERRS=$(echo "$PYFILES" | tr '\n' '\0' | xargs -0 "$PY" -m pyflakes 2>&1 \
+    | grep -vE "imported but unused|assigned to but never used|f-string is missing placeholders|redefinition of unused|unable to detect undefined names")
+  if [ -n "$ERRS" ]; then
+    echo "pre-commit: pyflakes hataları:"
+    echo "$ERRS"
+    exit 1
+  fi
+fi
+
+# 3) Hızlı testler (yalnız Python dosyası değiştiyse)
+if [ -n "$PYFILES" ]; then
+  PYTHONIOENCODING=utf-8 "$PY" -m pytest tests -q -x --no-header -p no:cacheprovider >/tmp/vton_precommit_pytest.log 2>&1
+  if [ $? -ne 0 ]; then
+    tail -30 /tmp/vton_precommit_pytest.log
+    echo "pre-commit: testler başarısız."
+    exit 1
+  fi
+  tail -1 /tmp/vton_precommit_pytest.log
+fi
+exit 0
