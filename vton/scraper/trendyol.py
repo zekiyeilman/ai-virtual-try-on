@@ -10,6 +10,21 @@ import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+
+
+def _yerel_chromedriver_servisi():
+    """selenium-manager ağda takılabildiği için cache'teki chromedriver'ı doğrudan kullanır."""
+    import glob
+    adaylar = glob.glob(os.path.expanduser(r"~/.cache/selenium/chromedriver/*/*/chromedriver*"))
+    if not adaylar:
+        return None
+    def _ver(p):
+        try:
+            return tuple(int(x) for x in os.path.basename(os.path.dirname(p)).split("."))
+        except ValueError:
+            return (0,)
+    return Service(executable_path=max(adaylar, key=_ver))
 
 import sys
 
@@ -46,7 +61,8 @@ class TrendyolOtonomScraper:
 
         for i in range(5):
             try:
-                self.driver = webdriver.Chrome(options=chrome_options)
+                servis = _yerel_chromedriver_servisi()
+                self.driver = webdriver.Chrome(options=chrome_options, service=servis) if servis else webdriver.Chrome(options=chrome_options)
                 print("[OK] Otonom Chrome tarayıcısına başarıyla bağlanıldı!")
                 break
             except Exception:
@@ -67,7 +83,8 @@ class TrendyolOtonomScraper:
             if os.path.exists(binary):
                 opts.binary_location = binary
                 break
-        return webdriver.Chrome(options=opts)
+        servis = _yerel_chromedriver_servisi()
+        return webdriver.Chrome(options=opts, service=servis) if servis else webdriver.Chrome(options=opts)
 
     def _chrome_otomatik_baslat(self):
         print("[SYSTEM] Sistem kendi özel tarayıcısını başlatıyor...")

@@ -60,6 +60,7 @@ VTON/
 │   └── models/
 │       └── ansur.py           # ANSUR 3B çevre -> 2B genişlik
 ├── app.py                     # Gradio arayüzü
+├── CLAUDE.md                  # AI / Geliştirici mimari ve dosya rehberi
 ├── colab_run.ipynb            # Colab notebook'u
 ├── pyproject.toml
 ├── requirements.txt
@@ -68,8 +69,6 @@ VTON/
 ├── dataset/ansur/             # ANSUR II veri seti
 └── goruntu/                   # Kullanıcı ön/arka/yan + manken görselleri ve maskeler
 ```
-
-Kök dizindeki `node_01_segmentation.py`, `vton_engine.py` gibi dosyalar sadece **geriye dönük uyumluluk** içindir; gerçek kod `vton/` altındadır. Eski `from vton_engine import VTONEngine` import'ları çalışmaya devam eder.
 
 Dosya yolları `vton/paths.py` üzerinden repo köküne göre çözülür. Farklı bir veri klasörü için `VTON_HOME` ortam değişkenini ayarlayabilirsiniz.
 

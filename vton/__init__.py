@@ -1,24 +1,27 @@
 """
-VTON - Beden duyarlı sanal giydirme (Virtual Try-On) paketi.
-
-Kullanım:
-    from vton import VTONEngine, SegFormerNode
-    from vton.scraper import vton_otonom_boru_hatti
-
-Ağır bağımlılıklar (torch, transformers, selenium) sadece ilgili sınıf
-ilk kullanıldığında yüklenir; `import vton` hızlı kalır.
+VTON - Size-Aware & Physics-Aware 360° Virtual Try-On Package.
 """
+
 import importlib
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 _LAZY = {
     "VTONEngine": "vton.engine",
+    "run_vton_pipeline": "vton.engine",
     "SegFormerNode": "vton.nodes.segmentation",
     "BodyMeshNode": "vton.nodes.body_mesh",
     "FitHeatmapNode": "vton.nodes.heatmap",
     "Ansur3DTo2DConverter": "vton.models.ansur",
-    "render_with_idm_vton": "vton.renderer",
+    "CategoryRouter": "vton.category_router",
+    "CategoryRouteConfig": "vton.category_router",
+    "AsymmetricScaleSpec": "vton.category_router",
+    "GlobalModelRegistry": "vton.category_router",
+    "get_global_models": "vton.category_router",
+    "AnatomicalMaskGenerator": "vton.mask_generator",
+    "ThinPlateSplineWarper": "vton.mask_generator",
+    "load_idm_vton_pipeline_vram_safe": "vton.inference_api",
+    "render_with_idm_vton": "vton.inference_api",
     "ayikla_ust_kiyafet": "vton.extractor",
     "vton_otonom_boru_hatti": "vton.scraper.pipeline",
 }
